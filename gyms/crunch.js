@@ -69,7 +69,7 @@ const runCrunchGymInterval = async (minutes) => {
   const {clubId, name} = await getClubInfoForZip(CLUB_ZIP);
   const occupancy = await getCurrentOccupancy(clubId);
 
-  await recreateBucket('Gyms', GYM_NAME);
+  await recreateBucket(GYM_NAME);
   writeOccupancyValue(GYM_NAME, name, occupancy);
 
   setInterval(async () => {
