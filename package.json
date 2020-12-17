@@ -1,0 +1,20 @@
+{
+  "name": "crunchstatus",
+  "version": "1.0.0",
+  "description": "Utility to check the current occupancy of your Crunch gym",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "Ian Dansereau",
+  "license": "ISC",
+  "dependencies": {
+    "@influxdata/influxdb-client": "^1.9.0",
+    "@influxdata/influxdb-client-apis": "^1.9.0",
+    "axios": "^0.21.0",
+    "dotenv": "^8.2.0",
+    "influx": "^5.6.3",
+    "jsdom": "^16.4.0"
+  }
+}
