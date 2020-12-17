@@ -1,10 +1,9 @@
 {
-  "name": "crunchstatus",
+  "name": "gym-occupancy-tracker",
   "version": "1.0.0",
-  "description": "Utility to check the current occupancy of your Crunch gym",
+  "description": "Utility to check and track the current occupancy your gyms",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js"
   },
   "author": "Ian Dansereau",
