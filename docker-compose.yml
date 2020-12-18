@@ -1,0 +1,66 @@
+version: '2'
+services:
+  web:
+    image: node:latest
+    ports:
+      - "5000:5000"
+    env_file: .env
+    depends_on:
+      - db
+    volumes:
+      - ./webapp:/opt/webapp
+  db:
+    image: influxdb:latest
+    ports:
+      - "8089:8089"
+
+version: '3'
+
+services:
+  db:
+    image: quay.io/influxdb/influxdb:v2.0.3
+    container_name: db
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - influxdb:/var/lib/influxdb2
+    command: influxd run --bolt-path /var/lib/influxdb2/influxd.bolt --engine-path /var/lib/influxdb2/engine --store bolt
+    networks:
+      - app-network
+    ports:
+      - "8086:8086"
+
+  nodejs:
+    build:
+      context: .
+      dockerfile: dockerfile
+    container_name: nodejs
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - CLUB_ZIP=$CLUB_ZIP
+      - POLL_FREQUENCY_MINUTES=$POLL_FREQUENCY_MINUTES
+      - INFLUX_TOKEN=$INFLUX_TOKEN
+      - INFLUX_HOSTNAME=db
+      - INFLUX_PORT=$INFLUX_PORT
+      - INFLUX_ORG_NAME=$INFLUX_ORG_NAME
+      - CENTRAL_ROCK_LOCATION=$CENTRAL_ROCK_LOCATION
+      - WAIT_HOSTS=db:8086
+    ports:
+      - "80:8080"
+    volumes:
+      - .:/home/node/app
+      - node_modules:/home/node/app/node_modules
+    networks:
+      - app-network
+    command: npm run production
+    depends_on:
+      - db
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  influxdb:
+  node_modules:
