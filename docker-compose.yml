@@ -45,6 +45,7 @@ services:
       - INFLUX_PORT=$INFLUX_PORT
       - INFLUX_ORG_NAME=$INFLUX_ORG_NAME
       - CENTRAL_ROCK_LOCATION=$CENTRAL_ROCK_LOCATION
+      - TZ=America/New_York
       - WAIT_HOSTS=db:8086
     ports:
       - "80:8080"

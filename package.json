@@ -4,7 +4,8 @@
   "description": "Utility to check and track the current occupancy your gyms",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "cross-env NODE_ENV=development node index.js",
+    "production": "cross-env NODE_ENV=production node index.js"
   },
   "author": "Ian Dansereau",
   "license": "ISC",
@@ -12,8 +13,10 @@
     "@influxdata/influxdb-client": "^1.9.0",
     "@influxdata/influxdb-client-apis": "^1.9.0",
     "axios": "^0.21.0",
+    "cross-env": "^7.0.3",
     "dotenv": "^8.2.0",
     "influx": "^5.6.3",
-    "jsdom": "^16.4.0"
+    "jsdom": "^16.4.0",
+    "nodemon": "^2.0.6"
   }
 }
