@@ -13,13 +13,23 @@ const { runCrunchGymInterval, runCentralRockGymInterval } = require('./gyms');
 
 const {
   POLL_FREQUENCY_MINUTES,
+  CENTRAL_ROCK_LOCATIONS,
+  CRUNCH_GYM_LOCATIONS,
 } = process.env;
 
 // calculate minutes in ms for use with setInteral()
 const MINUTES = (minutes) => 1000 * 60 * minutes;
 
-// initialize crunch gym
-runCrunchGymInterval(MINUTES(POLL_FREQUENCY_MINUTES));
+// initialize central rock gyms
+if (CENTRAL_ROCK_LOCATIONS) {
+  CENTRAL_ROCK_LOCATIONS.split(',').forEach((gymCode) => {
+    runCentralRockGymInterval(gymCode, MINUTES(POLL_FREQUENCY_MINUTES));
+  })
+}
 
-// initialize central rock gym
-runCentralRockGymInterval(MINUTES(POLL_FREQUENCY_MINUTES));
+// initialize crunch gyms
+if (CRUNCH_GYM_LOCATIONS) {
+  CRUNCH_GYM_LOCATIONS.split(',').forEach((zipCode) => {
+    runCrunchGymInterval(zipCode, MINUTES(POLL_FREQUENCY_MINUTES));
+  })
+}

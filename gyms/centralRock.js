@@ -9,9 +9,6 @@
 const jsdom = require("jsdom");
 const { writeOccupancyValue, recreateBucket } = require('../db/influx');
 
-// constants used from .env
-const { CENTRAL_ROCK_LOCATION } = process.env;
-
 const CENTRAL_ROCK_API = 'https://portal.rockgympro.com/portal/public/8739d0da7cbaf71e7b705269a129d177/occupancy';
 const GYM_NAME = 'CentralRockGym';
 
@@ -60,14 +57,15 @@ const getCurrentOccupancy = async (gymCode) => {
  * 
  * @param minutes: number of minutes to wait between run intervals 
  */
-const runCentralRockGymInterval = async (minutes) => {
-  const occupancy = await getCurrentOccupancy(CENTRAL_ROCK_LOCATION);
+const runCentralRockGymInterval = async (gymCode, minutes) => {
+  console.log(`Setting up central rock ${gymCode}`);
+  const occupancy = await getCurrentOccupancy(gymCode);
   await recreateBucket(GYM_NAME);
-  writeOccupancyValue(GYM_NAME, CENTRAL_ROCK_LOCATION, occupancy);
+  writeOccupancyValue(GYM_NAME, gymCode, occupancy);
 
   setInterval(async () => {
-    const occupancy = await getCurrentOccupancy(CENTRAL_ROCK_LOCATION);
-    writeOccupancyValue(GYM_NAME, CENTRAL_ROCK_LOCATION, occupancy);
+    const occupancy = await getCurrentOccupancy(gymCode);
+    writeOccupancyValue(GYM_NAME, gymCode, occupancy);
   }, minutes);
 }
 
