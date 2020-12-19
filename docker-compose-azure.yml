@@ -1,0 +1,36 @@
+version: '3'
+services:
+  db:
+    image: quay.io/influxdb/influxdb:v2.0.3
+    container_name: db
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - influxdb:/var/lib/influxdb2
+    command: influxd run --bolt-path /var/lib/influxdb2/influxd.bolt --engine-path /var/lib/influxdb2/engine --store bolt
+    ports:
+      - "8086:8086"
+    domainname: $AZURE_DOMAIN_NAME
+
+  gym-tracker-nodejs:
+    build:
+      context: .
+      dockerfile: dockerfile
+    image: $AZURE_IMAGE_NAME
+    container_name: gym-tracker-nodejs
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - TZ=America/New_York
+      - WAIT_HOSTS=db:8086
+    command: npm run production
+    domainname: $AZURE_DOMAIN_NAME
+    depends_on:
+      - db
+
+volumes:
+  influxdb:
+    driver: azure_file
+    driver_opts:
+      share_name: $AZURE_SHARE_NAME
+      storage_account_name: $AZURE_STORAGE_NAME

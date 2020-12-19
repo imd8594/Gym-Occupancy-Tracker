@@ -9,9 +9,6 @@
 const { $GET } = require('../utils/requests');
 const { writeOccupancyValue, recreateBucket } = require('../db/influx');
 
-// constants used from .env
-const { CLUB_ZIP } = process.env;
-
 const CRUNCH_API = 'https://www.crunch.com/crunch_core/clubs/';
 const CLUB_API = (clubId) => `${CRUNCH_API}${clubId}`;
 const GYM_NAME = 'CrunchGym';
@@ -65,8 +62,9 @@ const getCurrentOccupancy = async (clubId) => {
  * 
  * @param minutes: number of minutes to wait between run intervals 
  */
-const runCrunchGymInterval = async (minutes) => {
-  const {clubId, name} = await getClubInfoForZip(CLUB_ZIP);
+const runCrunchGymInterval = async (zipCode, minutes) => {
+  console.log(`Setting up crunch ${zipCode}`);
+  const {clubId, name} = await getClubInfoForZip(zipCode);
   const occupancy = await getCurrentOccupancy(clubId);
 
   await recreateBucket(GYM_NAME);
