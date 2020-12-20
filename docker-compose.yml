@@ -17,7 +17,7 @@ services:
     build:
       context: .
       dockerfile: dockerfile
-    image: gymmetrics.azurecr.io/gym-tracker-nodejs
+    image: your_aci_name.azurecr.io/gym-tracker-nodejs
     container_name: gym-tracker-nodejs
     restart: unless-stopped
     env_file: .env
